@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAPPY BIRTHDAY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Quicksand&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to top, #ff9a9e, #fad0c4);
+      background-attachment: fixed;
+      background-size: cover;
+      color: #fff;
+      font-family: 'Quicksand', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      flex-direction: column;
+    }
+
+    .content-wrapper {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      max-width: 800px;
+      margin: 20px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #6b4226;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #6b4226;
+      margin-bottom: 20px;
+    }
+
+    #typewriter, #text {
+      font-size: 1.2rem;
+      color: #4e342e;
+      max-width: 600px;
+      line-height: 1.6;
+      white-space: pre-line;
+      min-height: 100px;
+      margin: 0 auto 20px;
+    }
+
+    #imageContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .finalImage {
+      width: 120px;
+      max-width: 150px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #ffffffaa;
+      border: none;
+      border-radius: 8px;
+      color: #6b4226;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    #startBtn:hover {
+      background-color: #ffffff;
+    }
+
+    .thanks-button {
+      background-color: transparent;
+      border: 1px solid #fff;
+      color: #fff;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      margin-top: 30px;
+    }
+
+    .thanks-button:hover {
+      background-color: #5de13c;
+      color: #e2d9d9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="content-wrapper">
+    <h1>Untuk Kamu</h1>
+    <h2>🌸 Rahma.. 🌸</h2>
+
+    <button id="startBtn">Klik untuk Memulai</button>
+
+    <p id="typewriter"></p>
+    <p id="text"></p>
+
+    <audio id="bgSound" src="typewriter.mp3" preload="auto"></audio>
+
+    <div id="imageContainer">
+      <img class="finalImage" src="foto1.jpg" alt="Foto 1" />
+      <img class="finalImage" src="foto2.jpg" alt="Foto 2" />
+      <img class="finalImage" src="foto3.jpg" alt="Foto 3" />
+      <img class="finalImage" src="foto4.jpg" alt="Foto 4" />
+    </div>
+    <div id="imageContainer">
+      <img class="finalImage" src="foto10.jpg" alt="Foto 1" />
+      <img class="finalImage" src="foto7.jpg" alt="Foto 2" />
+      <img class="finalImage" src="foto12.jpg" alt="Foto 3" />
+      <img class="finalImage" src="foto9.jpg" alt="Foto 4" />
+    </div>
+    <button onclick="window.location.href='selesai.html'" class="thanks-button">thank you for all 🌷</button>
+  </div>
+
+  <script>
+    const texts = [
+      "Semoga kamu selalu diberi kesehatan, kebahagiaan, dan kekuatan setiap harinya.",
+      "Setiap hal yang kamu doakan, semoga menjadi kenyataan.",
+      "Apa yang kamu perjuangkan hari ini, akan membuahkan hasil indah nanti.",
+      "Dan semoga semua harapan, keinginan baikmu dikabulkan oleh Allah. Aamiin 🤲",
+      ""
+    ];
+
+    const el = document.getElementById("typewriter");
+    const text2 = document.getElementById("text");
+    const startBtn = document.getElementById("startBtn");
+    const audio = document.getElementById("bgSound");
+
+    let currentText = 0;
+    let charIndex = 0;
+
+    function type() {
+      if (charIndex < texts[currentText].length) {
+        el.innerHTML += texts[currentText].charAt(charIndex);
+        charIndex++;
+        setTimeout(type, 40);
+      } else {
+        currentText++;
+        if (currentText < texts.length) {
+          setTimeout(() => {
+            el.innerHTML += "\n\n";
+            charIndex = 0;
+            type();
+          }, 1000);
+        } else {
+          setTimeout(startSecondType, 1500);
+        }
+      }
+    }
+
+    const tambahan = "Makasih atas semuanya... Mungkin ini kenangan terakhir aku buat kamu :)";
+    let i = 0;
+
+    function startSecondType() {
+      if (i < tambahan.length) {
+        text2.innerHTML += tambahan.charAt(i);
+        i++;
+        setTimeout(startSecondType, 50);
+      } else {
+        setTimeout(showAllImages, 300);
+      }
+    }
+
+    function fadeInImage(element, duration = 1000) {
+      const fps = 60;
+      const totalFrames = Math.round((duration / 1000) * fps);
+      let frame = 0;
+      let currentOpacity = 0, currentScale = 0.95;
+      const opacityInc = 1 / totalFrames;
+      const scaleInc = (1 - 0.95) / totalFrames;
+
+      const anim = setInterval(() => {
+        frame++;
+        currentOpacity += opacityInc;
+        currentScale += scaleInc;
+        element.style.opacity = currentOpacity;
+        element.style.transform = `scale(${currentScale})`;
+        if (frame >= totalFrames) {
+          clearInterval(anim);
+          element.style.opacity = 1;
+          element.style.transform = 'scale(1)';
+        }
+      }, 1000 / fps);
+    }
+
+    function showAllImages() {
+      const images = document.querySelectorAll('.finalImage');
+      images.forEach((img, idx) => {
+        setTimeout(() => {
+          fadeInImage(img, 800);
+        }, idx * 600);
+      });
+    }
+
+    startBtn.addEventListener("click", () => {
+      audio.play().catch(err => console.log("Gagal memutar suara:", err));
+      startBtn.style.display = "none";
+      type();
+    });
+  </script>
+</body>
+</html>
