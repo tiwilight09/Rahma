@@ -295,17 +295,30 @@
     animate();
 
     // User feedback logic
-    function submitFeedback() {
-      const input = document.getElementById('userFeedbackInput');
-      const display = document.getElementById('userFeedbackDisplay');
+   function submitFeedback() {
+  const input = document.getElementById('userFeedbackInput');
+  const display = document.getElementById('userFeedbackDisplay');
 
-      if (input.value.trim() !== '') {
-        display.textContent = `Pesanmu: "${input.value.trim()}"`;
-        input.value = '';
-      } else {
-        alert('Tulis sesuatu dulu dong!');
-      }
-    }
+  if (input.value.trim() !== '') {
+    const message = input.value.trim();
+    display.textContent = `Pesanmu: "${message}"`;
+    // Simpan pesan ke localStorage
+    localStorage.setItem('userFeedback', message);
+    input.value = '';
+  } else {
+    alert('Tulis sesuatu dulu dong!');
+  }
+}
+
+// Saat halaman dimuat, cek apakah ada pesan tersimpan
+window.addEventListener('DOMContentLoaded', () => {
+  const savedMessage = localStorage.getItem('userFeedback');
+  const display = document.getElementById('userFeedbackDisplay');
+
+  if (savedMessage) {
+    display.textContent = `Pesanmu: "${savedMessage}"`;
+  }
+});
   </script>
 
 </body>
