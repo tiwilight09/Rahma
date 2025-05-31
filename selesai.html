@@ -1,69 +1,112 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy Birthday Fireworks</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Birthday Fireworks</title>
 
-    body {
-      background-color: black;
-      overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
-      color: white;
-    }
+<style>
+  :root {
+    --primary-color: #ff69b4;
+    --text-color: #ffffff;
+    --background-color: #000000;
+  }
 
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+  }
+
+  h1 {
+    text-align: center;
+    margin: 40px 20px 20px;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 5px var(--primary-color);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+
+  .marquee-container {
+    margin: 20px auto;
+    text-align: center;
+  }
+
+  marquee {
+    font-size: 1.2rem;
+    color: #ffccff;
+  }
+
+  .video-container {
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .video-container video {
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+  }
+
+  .video-container video:hover {
+    transform: scale(1.03);
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  @media (max-width: 600px) {
     h1 {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 2.5rem;
-      color: #ffffff;
-      text-shadow: 2px 2px 5px #ff69b4;
-      font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      font-size: 2rem;
     }
 
-    .marquee-container {
-      margin-top: 30px;
-      text-align: center;
+    .marquee-container marquee {
+      font-size: 1rem;
     }
-
-    marquee {
-      font-size: 1.2rem;
-      color: #ffccff;
-      margin-bottom: 10px;
-    }
-
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-  </style>
+  }
+</style>
 </head>
+
 <body>
 
-  <h1>🎉  Happy Birthday To You 🎂 🎉</h1>
+  <h1>🎉 Happy Birthday To You 🎂 🎉</h1>
 
   <div class="marquee-container">
     <marquee scrollamount="5" width="80%" behavior="alternate">
-      May your life be filled with happiness:> Hope you like it!
+      May your life be filled with happiness 😊 Hope you like it!
     </marquee>
   </div>
 
   <canvas id="fireworksCanvas"></canvas>
 
-  <script>
-    const rnd = Math.random;
-    const flr = Math.floor;
+  <div class="video-container">
+    <video width="320" height="240" controls>
+      <source src="vidio1.mp4" type="video/mp4" />
+      Maaf, browser Anda tidak mendukung video.
+    </video>
+  </div>
 
+  <script>
     const canvas = document.getElementById('fireworksCanvas');
     const ctx = canvas.getContext('2d');
+
+    const rnd = Math.random;
+    const flr = Math.floor;
+    const gravity = 0.2;
+    const fireworks = [];
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -129,7 +172,6 @@
           this.vel.y += gravity;
         } else {
           if (exParticles.length === 0) {
-            flash = true;
             for (let i = 0; i < exPLen; i++) {
               const vel = new vector(-rndNum(10) + 5, -rndNum(10) + 5);
               const p = new particle(this.pos, vel);
@@ -171,11 +213,6 @@
       ctx.closePath();
     }
 
-    const fireworks = [];
-    const gravity = 0.2;
-    let snapTime = 0;
-    let flash = false;
-
     function init() {
       const numOfFireworks = 20;
       for (let i = 0; i < numOfFireworks; i++) {
@@ -190,22 +227,21 @@
     }
 
     function draw(time) {
-  update(time);
+      update(time);
 
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(0,0,0,0.3)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  for (let i = 0; i < fireworks.length; i++) {
-    if (fireworks[i].finish) {
-      fireworks[i] = new firework(rndNum(canvas.width), canvas.height);
-      fireworks[i].start = time;
+      for (let i = 0; i < fireworks.length; i++) {
+        if (fireworks[i].finish) {
+          fireworks[i] = new firework(rndNum(canvas.width), canvas.height);
+          fireworks[i].start = time;
+        }
+        fireworks[i].draw();
+      }
+
+      requestAnimationFrame(draw);
     }
-    fireworks[i].draw();
-  }
-
-  requestAnimationFrame(draw);
-}
-
 
     init();
     draw();
